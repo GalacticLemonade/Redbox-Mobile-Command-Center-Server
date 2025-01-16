@@ -26,5 +26,22 @@ namespace Redbox_Mobile_Command_Center_Server {
                 }
             }
         }
+
+        public static string Decrypt(string encryptedData) {
+            if (string.IsNullOrEmpty(encryptedData))
+                return null;
+            byte[] encryptedBytes = Convert.FromBase64String(encryptedData);
+            using (TripleDESCryptoServiceProvider cryptoServiceProvider = new TripleDESCryptoServiceProvider()) {
+                using (ICryptoTransform decryptor = cryptoServiceProvider.CreateDecryptor(m_keyValue, m_initialVector)) {
+                    using (MemoryStream memoryStream = new MemoryStream(encryptedBytes)) {
+                        using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read)) {
+                            using (StreamReader reader = new StreamReader(cryptoStream, Encoding.Default)) {
+                                return reader.ReadToEnd();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
