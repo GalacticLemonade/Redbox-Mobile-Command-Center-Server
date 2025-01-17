@@ -12,7 +12,15 @@ namespace Redbox_Mobile_Command_Center_Server {
         }
 
         public async static Task<string> OnServerIncomingData(string message) {
-            return "Server Receieved! Hi!!!";
+            string[] arguments = message.Split(' ');
+
+            switch(arguments[0]) {
+                case "ping-kiosk":
+                    return "200";
+            }
+
+            Console.WriteLine(message);
+            return "Completed";
         }
     }
 }
