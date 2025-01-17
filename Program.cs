@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Redbox_Mobile_Command_Center_Server {
     class Program {
@@ -10,7 +11,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             while (true) { }
         }
 
-        public static string OnServerIncomingData(string message) {
+        public async static Task<string> OnServerIncomingData(string message) {
             return "Server Receieved! Hi!!!";
         }
     }

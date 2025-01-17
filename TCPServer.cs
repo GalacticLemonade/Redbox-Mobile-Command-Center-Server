@@ -50,7 +50,7 @@ public class TCPServer {
                     message = EncryptionHelper.Decrypt(message);
                     Console.WriteLine($"Received from client: {message}");
 
-                    String response = Program.OnServerIncomingData(message);
+                    String response = await Program.OnServerIncomingData(message);
 
                     response = EncryptionHelper.Encrypt(response);
                     byte[] responseData = Encoding.UTF8.GetBytes(response);
