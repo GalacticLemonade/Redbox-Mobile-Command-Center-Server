@@ -11,7 +11,7 @@ namespace Redbox_Mobile_Command_Center_Server {
         }
 
         public static string OnServerIncomingData(string message) {
-            return "a";
+            return "Server Receieved! Hi!!!";
         }
     }
 }
