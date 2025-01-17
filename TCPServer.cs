@@ -37,36 +37,35 @@ public class TCPServer {
         }
     }
 
-    private async Task<string> HandleClientAsync(TcpClient client) {
-        using (client) {
-            NetworkStream stream = client.GetStream();
-            byte[] buffer = new byte[1024];
-            int bytesRead;
+    private async Task HandleClientAsync(TcpClient client) {
+        NetworkStream stream = client.GetStream();
+        byte[] buffer = new byte[1024];
 
-            try {
-                bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+        try {
+            while (client.Connected) {
+                int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
                 if (bytesRead > 0) {
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                     message = EncryptionHelper.Decrypt(message);
                     Console.WriteLine($"Received from client: {message}");
 
-                    String response = await Program.OnServerIncomingData(message);
-
+                    string response = await Program.OnServerIncomingData(message);
                     response = EncryptionHelper.Encrypt(response);
                     byte[] responseData = Encoding.UTF8.GetBytes(response);
                     await stream.WriteAsync(responseData, 0, responseData.Length);
-
-                    return message; // Return the message received from the client
+                }
+                else {
+                    // If no data is received, assume the client has disconnected.
+                    break;
                 }
             }
-            catch (Exception ex) {
-                Console.WriteLine($"Error handling client: {ex.Message}");
-            }
-            finally {
-                Console.WriteLine($"Client disconnected: {client.Client.RemoteEndPoint}");
-            }
         }
-
-        return string.Empty; // Return an empty string if no message is received
+        catch (Exception ex) {
+            Console.WriteLine($"Error handling client: {ex.Message}");
+        }
+        finally {
+            Console.WriteLine($"Client disconnected: {client.Client.RemoteEndPoint}");
+            client.Close(); // Ensure the client connection is properly closed
+        }
     }
 }
