@@ -9,5 +9,9 @@ namespace Redbox_Mobile_Command_Center_Server {
             // prevent closing of app
             while (true) { }
         }
+
+        public static string OnServerIncomingData(string message) {
+            return "a";
+        }
     }
 }
