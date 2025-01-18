@@ -25,7 +25,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             // Subscribe to events
             halConnection.MessageReceived += (halMessage) =>
             {
-                Console.WriteLine(halMessage);
+                //Console.WriteLine(halMessage);
                 messageCount++;
 
                 if (messageCount == 2) {
@@ -77,14 +77,14 @@ namespace Redbox_Mobile_Command_Center_Server {
                 case "execute-command":
                     string command = arguments[1];
 
-                    Console.WriteLine("Execute-Command");
-                    Console.WriteLine(command);
+                    //Console.WriteLine("Execute-Command");
+                    //Console.WriteLine(command);
 
                     switch (command) {
                         case "hal-startup":
+                            // Test Comm
                             string halResponse = await SendHALCommandAsync("SERVICE test-comm\r\n");
 
-                            //split the response by CRLF (carriage return and line feed)
                             List<string> responseLines = SplitByCRLF(halResponse);
                             
                             if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
@@ -95,9 +95,9 @@ namespace Redbox_Mobile_Command_Center_Server {
                                 return "402";
                             }
 
+                            // Get Kiosk ID
                             halResponse = await SendHALCommandAsync("SERVICE get-kiosk-id\r\n");
 
-                            //split the response by CRLF (carriage return and line feed)
                             responseLines = SplitByCRLF(halResponse);
 
                             if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
@@ -113,7 +113,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                     break;
             }
 
-            Console.WriteLine(message);
+            //Console.WriteLine(message);
             return "Completed";
         }
     }
