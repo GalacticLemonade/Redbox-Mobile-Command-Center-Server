@@ -25,6 +25,8 @@ namespace Redbox_Mobile_Command_Center_Server {
             // Subscribe to events
             halConnection.MessageReceived += (halMessage) =>
             {
+                Console.WriteLine("sent message: " + command);
+                Console.WriteLine("recieved message: " + halMessage);
                 //Console.WriteLine(halMessage);
                 messageCount++;
 
@@ -142,7 +144,12 @@ namespace Redbox_Mobile_Command_Center_Server {
                             // Set diagnostic mode to true(?)
                             halResponse = await SendHALCommandAsync("SERVICE diagnostic-mode status: true\r\n");
 
+                            Console.WriteLine("145");
+
                             responseLines = SplitByCRLF(halResponse);
+
+                            Console.WriteLine(responseLines[1] + " line 147");
+                            Console.WriteLine(responseLines[0] + " line 148");
 
                             if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
                                 Console.WriteLine("Response code 203 received.");
