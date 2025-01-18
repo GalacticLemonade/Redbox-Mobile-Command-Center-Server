@@ -108,6 +108,134 @@ namespace Redbox_Mobile_Command_Center_Server {
                                 return "402";
                             }
 
+                            // Check init job status
+                            halResponse = await SendHALCommandAsync("JOB init-status\r\n");
+
+                            responseLines = SplitByCRLF(halResponse);
+
+                            if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            // List all jobs (this is where parsing gets interesting!)
+                            // appears to be jobid|label|type(?)|priority|unknown|status(?)|status pt2(?)|status pt3(?)|unknown|unknown
+                            halResponse = await SendHALCommandAsync("JOB list\r\n");
+
+                            //im guessing it's \r\n between jobs?
+
+                            //responseLines = SplitByCRLF(halResponse);
+
+                            //if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
+                            //Console.WriteLine("Response code 203 received.");
+                            //}
+                            //else {
+                            //Console.WriteLine("Invalid response.");
+                            //return "402";
+                            //}
+
+                            Console.WriteLine("Recieved job list.");
+
+                            // Set diagnostic mode to true(?)
+                            halResponse = await SendHALCommandAsync("SERVICE diagnostic-mode status: true\r\n");
+
+                            responseLines = SplitByCRLF(halResponse);
+
+                            if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            // Compile lua script 1
+                            halResponse = await SendHALCommandAsync("PROGRAM compile path: @'C:\\Program Files\\Redbox\\MS HAL Tester\\bin\\Scripts\\ms-pull-in-dvd.hs' name: 'ms-pull-in-dvd' requires-client-connection: False\r\n");
+
+                            responseLines = SplitByCRLF(halResponse);
+
+                            if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            // Compile lua script 2
+                            halResponse = await SendHALCommandAsync("PROGRAM compile path: @'C:\\Program Files\\Redbox\\MS HAL Tester\\bin\\Scripts\\ms-vend-disk-in-picker.hs' name: 'ms-vend-disk-in-picker' requires-client-connection: False\r\n");
+
+                            responseLines = SplitByCRLF(halResponse);
+
+                            if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            // Create a new configuration job
+                            // also fun parsing!!
+                            // appears to return as jobid|label|type|priority|unknown|status(?)|state(?)|idfk(?)|unknown|unknown
+                            // 203 Command completed successfully. (Execution Time = 00:00:00.0000000)
+                            halResponse = await SendHALCommandAsync("SERVICE diagnostic-mode status: true\r\n");
+
+                            responseLines = SplitByCRLF(halResponse);
+
+                            string kioskConfigJobID = responseLines[0].Split('|')[0];
+
+                            if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received. With JobID " + kioskConfigJobID);
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            // connect to the job we just made
+                            halResponse = await SendHALCommandAsync("JOB connect job: '" + kioskConfigJobID + "'\r\n");
+
+                            responseLines = SplitByCRLF(halResponse);
+
+                            if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            // check job status (why here though?)
+                            halResponse = await SendHALCommandAsync("JOB scheduler-status'\r\n");
+
+                            responseLines = SplitByCRLF(halResponse);
+
+                            if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            // start job
+                            //JOB pend job: 'QSEMKZ'
+                            halResponse = await SendHALCommandAsync("JOB pend job: '" + kioskConfigJobID + "'\r\n");
+
+                            responseLines = SplitByCRLF(halResponse);
+
+                            if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received. FINAL LINE! YAY!");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
                             break;
                     }
                     break;
