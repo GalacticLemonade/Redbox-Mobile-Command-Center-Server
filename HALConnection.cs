@@ -97,7 +97,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             }
 
             Disconnected?.Invoke();
-            Console.WriteLine("Disconnected from the server.");
+            Console.WriteLine("Disconnected from HAL.");
         }
     }
 }
