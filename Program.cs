@@ -175,11 +175,11 @@ namespace Redbox_Mobile_Command_Center_Server {
 
                             responseLines = SplitByCRLF(halResponse);
 
-                            if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
-                                Console.WriteLine("Response code 203 received.");
+                            if (responseLines.Count > 1 && responseLines[0].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received. Line 179.");
                             }
                             else {
-                                Console.WriteLine("Invalid response.");
+                                Console.WriteLine("Invalid response. Line 179.");
                                 return "402";
                             }
 
@@ -187,7 +187,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             // also fun parsing!!
                             // appears to return as jobid|label|type|priority|unknown|status(?)|state(?)|idfk(?)|unknown|unknown
                             // 203 Command completed successfully. (Execution Time = 00:00:00.0000000)
-                            halResponse = await SendHALCommandAsync("SERVICE diagnostic-mode status: true\r\n");
+                            halResponse = await SendHALCommandAsync("JOB schedule name: 'kiosk-configuration-job' priority: Highest label: ''\r\n");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -202,7 +202,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             // connect to the job we just made
-                            halResponse = await SendHALCommandAsync("JOB schedule name: 'kiosk-configuration-job' priority: Highest label: ''\r\n");
+                            halResponse = await SendHALCommandAsync("JOB connect job: '" + kioskConfigJobID + "'\r\n");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -241,6 +241,9 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             break;
+                        case "home-x":
+                            SendHALCommandAsync("JOB execute-immediate statement: 'HOMEX'\r\n");
+                            return "200";
                     }
                     break;
             }
