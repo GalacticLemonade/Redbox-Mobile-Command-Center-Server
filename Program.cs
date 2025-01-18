@@ -25,12 +25,12 @@ namespace Redbox_Mobile_Command_Center_Server {
             // Subscribe to events
             halConnection.MessageReceived += (halMessage) =>
             {
-                Console.WriteLine("sent message: " + command);
-                Console.WriteLine("recieved message: " + halMessage);
+
                 //Console.WriteLine(halMessage);
                 messageCount++;
 
                 if (messageCount == 2) {
+
                     // Capture the second message (command response)
                     commandResponse = halMessage;
                     tcs.SetResult(commandResponse); // Set the result once we have the second response
@@ -46,6 +46,8 @@ namespace Redbox_Mobile_Command_Center_Server {
             // Connect to HAL
             halConnection.Connect();
 
+            Thread.Sleep(500);
+
             // Send the command to HAL
             halConnection.SendMessage(command);
 
@@ -58,6 +60,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                 return null;
             }
             finally {
+                Console.WriteLine("Response recieved. Disconnect from HAL.");
                 halConnection.Disconnect();
             }
         }
@@ -144,14 +147,9 @@ namespace Redbox_Mobile_Command_Center_Server {
                             // Set diagnostic mode to true(?)
                             halResponse = await SendHALCommandAsync("SERVICE diagnostic-mode status: true\r\n");
 
-                            Console.WriteLine("145");
-
                             responseLines = SplitByCRLF(halResponse);
 
-                            Console.WriteLine(responseLines[1] + " line 147");
-                            Console.WriteLine(responseLines[0] + " line 148");
-
-                            if (responseLines.Count > 1 && responseLines[1].StartsWith("203")) {
+                            if (responseLines.Count > 1 && responseLines[0].StartsWith("203")) {
                                 Console.WriteLine("Response code 203 received.");
                             }
                             else {
