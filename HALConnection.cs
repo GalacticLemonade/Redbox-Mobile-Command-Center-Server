@@ -29,7 +29,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                 _client.Connect(_server, _port);
                 _stream = _client.GetStream();
 
-                Console.WriteLine("Connected to HAL");
+                Console.WriteLine("Connected to HAL.");
 
                 //start a thread to listen for incoming messages
                 _listenerThread = new Thread(ListenForMessages) {
@@ -77,11 +77,16 @@ namespace Redbox_Mobile_Command_Center_Server {
                 //connection was closed
             }
             finally {
-                Disconnect();
+                Disconnect(false);
             }
         }
 
-        public void Disconnect() {
+        public void Disconnect(bool sendQuit = true) {
+            if (sendQuit && _stream != null && _stream.CanWrite) {
+                SendMessage("quit");
+            }
+
+            /*
             if (_listenerThread != null && _listenerThread.IsAlive) {
                 _listenerThread.Join();
             }
@@ -95,6 +100,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                 _client.Close();
                 _client = null;
             }
+            */
 
             Disconnected?.Invoke();
             Console.WriteLine("Disconnected from HAL.");
