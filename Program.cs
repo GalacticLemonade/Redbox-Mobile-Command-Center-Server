@@ -204,7 +204,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             // connect to the job we just made
-                            halResponse = await SendHALCommandAsync("JOB connect job: '" + kioskConfigJobID + "'\r\n");
+                            halResponse = await SendHALCommandAsync("JOB schedule name: 'kiosk-configuration-job' priority: Highest label: ''\r\n");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -230,7 +230,6 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             // start job
-                            //JOB pend job: 'QSEMKZ'
                             halResponse = await SendHALCommandAsync("JOB pend job: '" + kioskConfigJobID + "'\r\n");
 
                             responseLines = SplitByCRLF(halResponse);
