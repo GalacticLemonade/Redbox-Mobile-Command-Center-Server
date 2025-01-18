@@ -17,6 +17,15 @@ namespace Redbox_Mobile_Command_Center_Server {
             switch(arguments[0]) {
                 case "ping-kiosk":
                     return "200";
+                case "execute-command":
+                    string command = arguments[1];
+
+                    switch (command) {
+                        case "hal-startup":
+
+                            break;
+                    }
+                    break;
             }
 
             Console.WriteLine(message);
