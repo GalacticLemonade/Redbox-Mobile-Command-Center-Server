@@ -13,7 +13,7 @@ namespace Redbox_Mobile_Command_Center_Server {
         private readonly int _port;
         private TcpClient _client;
         private NetworkStream _stream;
-        private Thread _listenerThread;
+        private Task _listenerTask;
 
         public event Action<string> MessageReceived;
         public event Action Disconnected;
@@ -31,11 +31,8 @@ namespace Redbox_Mobile_Command_Center_Server {
 
                 Console.WriteLine("Connected to HAL.");
 
-                //start a thread to listen for incoming messages
-                _listenerThread = new Thread(ListenForMessages) {
-                    IsBackground = true
-                };
-                _listenerThread.Start();
+                // Start a task to listen for incoming messages
+                _listenerTask = Task.Run(() => ListenForMessages());
             }
             catch (Exception ex) {
                 Console.WriteLine("Error: " + ex.Message);
@@ -59,8 +56,8 @@ namespace Redbox_Mobile_Command_Center_Server {
 
         private void ListenForMessages() {
             try {
+                byte[] buffer = new byte[1024];
                 while (_client != null && _client.Connected) {
-                    byte[] buffer = new byte[1024];
                     int bytesRead = _stream.Read(buffer, 0, buffer.Length);
 
                     if (bytesRead > 0) {
@@ -68,13 +65,13 @@ namespace Redbox_Mobile_Command_Center_Server {
                         MessageReceived?.Invoke(message);
                     }
                     else {
-                        //hal disconnected
+                        // HAL disconnected or closed the connection
                         break;
                     }
                 }
             }
             catch (IOException) {
-                //connection was closed
+                // Connection was closed
             }
             finally {
                 Disconnect(false);
@@ -85,22 +82,6 @@ namespace Redbox_Mobile_Command_Center_Server {
             if (sendQuit && _stream != null && _stream.CanWrite) {
                 SendMessage("quit");
             }
-
-            /*
-            if (_listenerThread != null && _listenerThread.IsAlive) {
-                _listenerThread.Join();
-            }
-
-            if (_stream != null) {
-                _stream.Close();
-                _stream = null;
-            }
-
-            if (_client != null) {
-                _client.Close();
-                _client = null;
-            }
-            */
 
             Disconnected?.Invoke();
             Console.WriteLine("Disconnected from HAL.");
