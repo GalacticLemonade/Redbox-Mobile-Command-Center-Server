@@ -14,6 +14,8 @@ namespace Redbox_Mobile_Command_Center_Server {
         }
 
         private static async Task<string> SendHALCommandAsync(string command) {
+            command = command + "\r\n";
+
             // Create the connection instance
             HALConnection halConnection = new HALConnection("127.0.0.1", 7001);
 
@@ -25,8 +27,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             // Subscribe to events
             halConnection.MessageReceived += (halMessage) =>
             {
-
-                //Console.WriteLine(halMessage);
+                Console.WriteLine(halMessage);
                 messageCount++;
 
                 if (messageCount == 2) {
@@ -47,6 +48,8 @@ namespace Redbox_Mobile_Command_Center_Server {
             halConnection.Connect();
 
             Thread.Sleep(500);
+
+            Console.WriteLine("yo?? wake up??");
 
             // Send the command to HAL
             halConnection.SendMessage(command);
@@ -88,7 +91,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                     switch (command) {
                         case "hal-startup":
                             // Test Comm
-                            string halResponse = await SendHALCommandAsync("SERVICE test-comm\r\n");
+                            string halResponse = await SendHALCommandAsync("SERVICE test-comm");
 
                             List<string> responseLines = SplitByCRLF(halResponse);
                             
@@ -100,8 +103,8 @@ namespace Redbox_Mobile_Command_Center_Server {
                                 return "402";
                             }
 
-                            // Get Kiosk ID
-                            halResponse = await SendHALCommandAsync("SERVICE get-kiosk-id\r\n");
+                            // Get Kiosk I
+                            halResponse = await SendHALCommandAsync("SERVICE get-kiosk-id");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -114,7 +117,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             // Check init job status
-                            halResponse = await SendHALCommandAsync("JOB init-status\r\n");
+                            halResponse = await SendHALCommandAsync("JOB init-status");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -128,7 +131,7 @@ namespace Redbox_Mobile_Command_Center_Server {
 
                             // List all jobs (this is where parsing gets interesting!)
                             // appears to be jobid|label|type(?)|priority|unknown|status(?)|status pt2(?)|status pt3(?)|unknown|unknown
-                            halResponse = await SendHALCommandAsync("JOB list\r\n");
+                            halResponse = await SendHALCommandAsync("JOB list");
 
                             //im guessing it's \r\n between jobs?
 
@@ -145,7 +148,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             Console.WriteLine("Recieved job list.");
 
                             // Set diagnostic mode to true(?)
-                            halResponse = await SendHALCommandAsync("SERVICE diagnostic-mode status: true\r\n");
+                            halResponse = await SendHALCommandAsync("SERVICE diagnostic-mode status: true");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -158,7 +161,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             // Compile lua script 1
-                            halResponse = await SendHALCommandAsync("PROGRAM compile path: @'C:\\Program Files\\Redbox\\MS HAL Tester\\bin\\Scripts\\ms-pull-in-dvd.hs' name: 'ms-pull-in-dvd' requires-client-connection: False\r\n");
+                            halResponse = await SendHALCommandAsync("PROGRAM compile path: @'C:\\Program Files\\Redbox\\MS HAL Tester\\bin\\Scripts\\ms-pull-in-dvd.hs' name: 'ms-pull-in-dvd' requires-client-connection: False");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -171,7 +174,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             // Compile lua script 2
-                            halResponse = await SendHALCommandAsync("PROGRAM compile path: @'C:\\Program Files\\Redbox\\MS HAL Tester\\bin\\Scripts\\ms-vend-disk-in-picker.hs' name: 'ms-vend-disk-in-picker' requires-client-connection: False\r\n");
+                            halResponse = await SendHALCommandAsync("PROGRAM compile path: @'C:\\Program Files\\Redbox\\MS HAL Tester\\bin\\Scripts\\ms-vend-disk-in-picker.hs' name: 'ms-vend-disk-in-picker' requires-client-connection: False");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -187,7 +190,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             // also fun parsing!!
                             // appears to return as jobid|label|type|priority|unknown|status(?)|state(?)|idfk(?)|unknown|unknown
                             // 203 Command completed successfully. (Execution Time = 00:00:00.0000000)
-                            halResponse = await SendHALCommandAsync("JOB schedule name: 'kiosk-configuration-job' priority: Highest label: ''\r\n");
+                            halResponse = await SendHALCommandAsync("JOB schedule name: 'kiosk-configuration-job' priority: Highest label: ''");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -202,7 +205,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             // connect to the job we just made
-                            halResponse = await SendHALCommandAsync("JOB connect job: '" + kioskConfigJobID + "'\r\n");
+                            halResponse = await SendHALCommandAsync("JOB connect job: '" + kioskConfigJobID + "'");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -215,7 +218,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             // check job status (why here though?)
-                            halResponse = await SendHALCommandAsync("JOB scheduler-status'\r\n");
+                            halResponse = await SendHALCommandAsync("JOB scheduler-status'");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -228,7 +231,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             // start job
-                            halResponse = await SendHALCommandAsync("JOB pend job: '" + kioskConfigJobID + "'\r\n");
+                            halResponse = await SendHALCommandAsync("JOB pend job: '" + kioskConfigJobID + "'");
 
                             responseLines = SplitByCRLF(halResponse);
 
@@ -241,8 +244,99 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             break;
+                        case "test-comm":
+                            SendHALCommandAsync("SERVICE test-comm");
+                            return "200";
+                        case "move-to-slot":
+                            //JOB schedule name: 'tester-move-to-slot' priority: Highest label: ''
+                            //STACK push value: 'slot' job: 'id'
+                            //STACK push value: 'deck' job: 'id'
+                            //JOB connect job: 'id'
+                            //JOB scheduler-status
+                            //JOB pend job: 'id'
+
+                            string slot = arguments[2];
+                            string deck = arguments[3];
+
+                            Console.WriteLine("mts");
+
+                            string halMoveToSlotResp = await SendHALCommandAsync("JOB schedule name: 'tester-move-to-slot' priority: Highest label: ''");
+
+                            List<string> responseLinesMTS = SplitByCRLF(halMoveToSlotResp);
+
+                            string kioskConfigJobID2 = responseLinesMTS[0].Split('|')[0];
+
+                            if (responseLinesMTS.Count > 1 && responseLinesMTS[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            halMoveToSlotResp = await SendHALCommandAsync("STACK push value: '" + slot + "' job: '" + kioskConfigJobID2 + "'");
+
+                            responseLinesMTS = SplitByCRLF(halMoveToSlotResp);
+
+                            if (responseLinesMTS.Count > 0 && responseLinesMTS[0].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            halMoveToSlotResp = await SendHALCommandAsync("STACK push value: '" + deck + "' job: '" + kioskConfigJobID2 + "'");
+
+                            responseLinesMTS = SplitByCRLF(halMoveToSlotResp);
+
+                            if (responseLinesMTS.Count > 0 && responseLinesMTS[0].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            halMoveToSlotResp = await SendHALCommandAsync("JOB connect job: '" + kioskConfigJobID2 + "'");
+
+                            responseLinesMTS = SplitByCRLF(halMoveToSlotResp);
+
+                            if (responseLinesMTS.Count > 0 && responseLinesMTS[0].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            halMoveToSlotResp = await SendHALCommandAsync("JOB scheduler-status");
+
+                            responseLinesMTS = SplitByCRLF(halMoveToSlotResp);
+
+                            if (responseLinesMTS.Count > 1 && responseLinesMTS[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            halMoveToSlotResp = await SendHALCommandAsync("JOB pend job: '" + kioskConfigJobID2 + "'");
+
+                            responseLinesMTS = SplitByCRLF(halMoveToSlotResp);
+
+                            if (responseLinesMTS.Count > 0 && responseLinesMTS[0].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
+
+                            break;
                         case "exit-tester":
-                            string halExitResp = await SendHALCommandAsync("JOB execute-immediate-base64 statement: 'IEFJUlhDSEdSIEZBTk9ODQogVkVORERPT1IgQ0xPU0UNCiBHUklQUEVSIFJFTlQNCiBHUklQUEVSIFJFVFJBQ1QNCiBTRU5TT1IgUElDS0VSLU9GRg0KIFJPTExFUiBTVE9QDQogUklOR0xJR0hUIE9GRg0KIENMRUFSDQo='\r\n");
+                            string halExitResp = await SendHALCommandAsync("JOB execute-immediate-base64 statement: 'IEFJUlhDSEdSIEZBTk9ODQogVkVORERPT1IgQ0xPU0UNCiBHUklQUEVSIFJFTlQNCiBHUklQUEVSIFJFVFJBQ1QNCiBTRU5TT1IgUElDS0VSLU9GRg0KIFJPTExFUiBTVE9QDQogUklOR0xJR0hUIE9GRg0KIENMRUFSDQo='");
 
                             List<string> responseLines232 = SplitByCRLF(halExitResp);
 
