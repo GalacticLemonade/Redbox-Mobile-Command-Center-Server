@@ -47,6 +47,7 @@ namespace Redbox_Mobile_Command_Center_Server {
 
             try {
                 byte[] data = Encoding.UTF8.GetBytes(message);
+                Console.WriteLine(message);
                 _stream.Write(data, 0, data.Length);
             }
             catch (Exception ex) {
