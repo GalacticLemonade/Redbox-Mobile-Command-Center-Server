@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Redbox_Mobile_Command_Center_Server.Commands {
-    public class TestCommCommand : ICommand {
+    public class PingKioskCommand : ICommand {
         public async Task<string> Run(string[] arguments) {
             return await Task.FromResult("200");
         }
