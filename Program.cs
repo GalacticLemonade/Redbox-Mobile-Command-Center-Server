@@ -125,12 +125,17 @@ namespace Redbox_Mobile_Command_Center_Server {
         public static async Task<string> OnServerIncomingData(string message) {
             string[] arguments = message.Split(' ');
 
-            switch (arguments[0]) {
-                
-            }
+            if (arguments.Length == 0)
+                return "Invalid command.";
 
-            //Console.WriteLine(message);
-            return "Completed";
+            string commandName = arguments[0];
+
+            if (CommandRegistry.Commands.TryGetValue(commandName, out ICommand command)) {
+                return await command.Run(arguments.Skip(1).ToArray());
+            }
+            else {
+                return "Unknown command: " + commandName;
+            }
         }
     }
 }

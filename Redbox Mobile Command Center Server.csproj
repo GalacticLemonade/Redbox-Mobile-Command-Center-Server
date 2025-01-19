@@ -36,9 +36,6 @@
     <Reference Include="Redbox.HAL.Client">
       <HintPath>Redbox\Redbox.HAL.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Redbox.IPC.Framework">
-      <HintPath>Redbox\Redbox.IPC.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandRegistry.cs" />
+    <Compile Include="Commands\TestCommand.cs" />
     <Compile Include="EncryptionHelper.cs" />
     <Compile Include="HALConnection.cs" />
     <Compile Include="ICommand.cs" />
@@ -61,8 +59,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
