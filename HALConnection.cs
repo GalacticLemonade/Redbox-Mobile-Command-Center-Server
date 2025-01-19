@@ -88,7 +88,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             Console.WriteLine("Disconnected from HAL.");
         }
 
-        private static async Task<string> SendHALCommandAsync(string command) {
+        public static async Task<string> SendHALCommandAsync(string command) {
             command = command + "\r\n";
 
             // Create the connection instance
