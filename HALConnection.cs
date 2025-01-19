@@ -122,8 +122,6 @@ namespace Redbox_Mobile_Command_Center_Server {
 
             Thread.Sleep(500);
 
-            Console.WriteLine("yo?? wake up??");
-
             // Send the command to HAL
             halConnection.SendMessage(command);
 
