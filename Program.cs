@@ -71,7 +71,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             string[] arguments = message.Split(' ');
 
             if (arguments.Length == 0)
-                return "400\r\nInvalid command.";
+                return "Invalid command.";
 
             string commandName = arguments[0];
             string[] commandArguments = arguments.Skip(1).ToArray();
@@ -80,7 +80,7 @@ namespace Redbox_Mobile_Command_Center_Server {
                 return await command.Run(commandArguments);
             }
             else {
-                return "400\r\nUnknown command: " + commandName;
+                return "Unknown command: " + commandName;
             }
         }
     }
