@@ -13,7 +13,6 @@ namespace Redbox_Mobile_Command_Center_Server {
         static CommandRegistry() {
             Commands = new Dictionary<string, ICommand>
             {
-                { "test-comm", new TestCommCommand() },
                 { "ping-kiosk", new PingKioskCommand() },
                 { "execute-on-kiosk", new ExecuteOnKioskCommand() }
             };
