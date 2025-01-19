@@ -52,6 +52,7 @@
     <Compile Include="EncryptionHelper.cs" />
     <Compile Include="HALConnection.cs" />
     <Compile Include="ICommand.cs" />
+    <Compile Include="KioskCommands\TestCommCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TCPClient.cs" />
@@ -60,8 +61,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="KioskCommands\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
