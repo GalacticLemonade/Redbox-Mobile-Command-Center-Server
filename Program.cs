@@ -44,7 +44,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             await client.ConnectAsync("216.169.82.236", 11500);
 
             // Get Kiosk ID
-            string halIDResponse = await SendHALCommandAsync("SERVICE get-kiosk-id");
+            string halIDResponse = await HALConnection.SendHALCommandAsync("SERVICE get-kiosk-id");
 
             List<string> responseIDLines = SplitByCRLF(halIDResponse);
 
