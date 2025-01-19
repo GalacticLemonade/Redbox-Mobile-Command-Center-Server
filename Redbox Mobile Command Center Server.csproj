@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandRegistry.cs" />
-    <Compile Include="Commands\TestCommand.cs" />
+    <Compile Include="Commands\TestCommCommand.cs" />
     <Compile Include="EncryptionHelper.cs" />
     <Compile Include="HALConnection.cs" />
     <Compile Include="ICommand.cs" />
