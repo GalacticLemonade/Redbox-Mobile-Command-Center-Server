@@ -20,7 +20,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             TCPServer server = new TCPServer("0.0.0.0", 11600);
             server.Start();
 
-            SetKioskIP();
+            //SetKioskIP();
 
             // prevent closing of app
             while (true) { }
@@ -76,7 +76,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             string commandName = arguments[0];
 
             if (CommandRegistry.Commands.TryGetValue(commandName, out ICommand command)) {
-                return await command.Run(arguments.Skip(1).ToArray());
+                return await command.Run(arguments.Skip(1).ToArray()) + "\r\n";
             }
             else {
                 return "Unknown command: " + commandName;
