@@ -71,15 +71,16 @@ namespace Redbox_Mobile_Command_Center_Server {
             string[] arguments = message.Split(' ');
 
             if (arguments.Length == 0)
-                return "Invalid command.";
+                return "400\r\nInvalid command.";
 
             string commandName = arguments[0];
+            string[] commandArguments = arguments.Skip(1).ToArray();
 
             if (CommandRegistry.Commands.TryGetValue(commandName, out ICommand command)) {
-                return await command.Run(arguments.Skip(1).ToArray()) + "\r\n";
+                return await command.Run(commandArguments);
             }
             else {
-                return "Unknown command: " + commandName;
+                return "400\r\nUnknown command: " + commandName;
             }
         }
     }
