@@ -14,7 +14,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             Commands = new Dictionary<string, ICommand>();
 
             //register commands
-            Commands.Add("test-comm", new PingKioskCommand());
+            Commands.Add("ping-kiosk", new PingKioskCommand());
         }
     }
 }
