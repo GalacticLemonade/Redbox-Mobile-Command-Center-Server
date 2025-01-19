@@ -72,6 +72,8 @@ namespace Redbox_Mobile_Command_Center_Server {
             TCPServer server = new TCPServer("0.0.0.0", 11600);
             server.Start();
 
+
+
             // prevent closing of app
             while (true) { }
         }
