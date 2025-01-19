@@ -241,8 +241,18 @@ namespace Redbox_Mobile_Command_Center_Server {
                             }
 
                             break;
-                        case "home-x":
-                            SendHALCommandAsync("JOB execute-immediate statement: 'HOMEX'\r\n");
+                        case "exit-tester":
+                            string halExitResp = await SendHALCommandAsync("JOB execute-immediate-base64 statement: 'IEFJUlhDSEdSIEZBTk9ODQogVkVORERPT1IgQ0xPU0UNCiBHUklQUEVSIFJFTlQNCiBHUklQUEVSIFJFVFJBQ1QNCiBTRU5TT1IgUElDS0VSLU9GRg0KIFJPTExFUiBTVE9QDQogUklOR0xJR0hUIE9GRg0KIENMRUFSDQo='\r\n");
+
+                            List<string> responseLines232 = SplitByCRLF(halExitResp);
+
+                            if (responseLines232.Count > 1 && responseLines232[1].StartsWith("203")) {
+                                Console.WriteLine("Response code 203 received.");
+                            }
+                            else {
+                                Console.WriteLine("Invalid response.");
+                                return "402";
+                            }
                             return "200";
                     }
                     break;
