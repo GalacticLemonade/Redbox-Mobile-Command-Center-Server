@@ -120,7 +120,7 @@ namespace Redbox_Mobile_Command_Center_Server {
             // Connect to HAL
             halConnection.Connect();
 
-            Thread.Sleep(500);
+            Thread.Sleep(25)
 
             // Send the command to HAL
             halConnection.SendMessage(command);
