@@ -87,5 +87,58 @@ namespace Redbox_Mobile_Command_Center_Server {
             Disconnected?.Invoke();
             Console.WriteLine("Disconnected from HAL.");
         }
+
+        private static async Task<string> SendHALCommandAsync(string command) {
+            command = command + "\r\n";
+
+            // Create the connection instance
+            HALConnection halConnection = new HALConnection("127.0.0.1", 7001);
+
+            string commandResponse = null;
+            int messageCount = 0;
+
+            var tcs = new TaskCompletionSource<string>();
+
+            // Subscribe to events
+            halConnection.MessageReceived += (halMessage) => {
+                Console.WriteLine(halMessage);
+                messageCount++;
+
+                if (messageCount == 2) {
+
+                    // Capture the second message (command response)
+                    commandResponse = halMessage;
+                    tcs.SetResult(commandResponse); // Set the result once we have the second response
+                }
+            };
+
+            halConnection.Disconnected += () => {
+                Console.WriteLine("The client has disconnected from HAL.");
+                tcs.TrySetCanceled(); // Cancel the TaskCompletionSource if disconnected
+            };
+
+            // Connect to HAL
+            halConnection.Connect();
+
+            Thread.Sleep(500);
+
+            Console.WriteLine("yo?? wake up??");
+
+            // Send the command to HAL
+            halConnection.SendMessage(command);
+
+            // Wait for the second response (non-blocking async)
+            try {
+                return await tcs.Task; // Will return when the second response is received
+            }
+            catch (OperationCanceledException) {
+                Console.WriteLine("Connection was closed or cancelled.");
+                return null;
+            }
+            finally {
+                Console.WriteLine("Response recieved. Disconnect from HAL.");
+                halConnection.Disconnect();
+            }
+        }
     }
 }
