@@ -11,7 +11,8 @@ namespace Redbox_Mobile_Command_Center_Server.Commands {
         private static readonly Dictionary<string, ICommand> KioskCommands = new Dictionary<string, ICommand> {
             { "test-comm", new TestCommCommand() },
             { "get-kiosk-id", new GetKioskIDCommand() },
-            { "tester-startup", new TesterStartupCommand() }
+            { "tester-startup", new TesterStartupCommand() },
+            { "tester-exit", new ExitTesterCommand() }
         };
 
         public async Task<string> Run(string[] arguments) {
