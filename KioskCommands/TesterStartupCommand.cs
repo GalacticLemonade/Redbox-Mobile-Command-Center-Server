@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Redbox_Mobile_Command_Center_Server.KioskCommands {
     public class TesterStartupCommand : ICommand {
         public async Task<string> Run(string[] arguments) {
-            return "";
+            throw new NotImplementedException();
         }
     }
 }
