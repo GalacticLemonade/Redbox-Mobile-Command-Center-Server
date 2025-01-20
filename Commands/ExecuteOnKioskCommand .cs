@@ -9,7 +9,8 @@ namespace Redbox_Mobile_Command_Center_Server.Commands {
     public class ExecuteOnKioskCommand : ICommand {
         // Internal registry for kiosk-specific commands
         private static readonly Dictionary<string, ICommand> KioskCommands = new Dictionary<string, ICommand> {
-            { "test-comm", new TestCommCommand() }
+            { "test-comm", new TestCommCommand() },
+            { "get-kiosk-id", new GetKioskIDCommand() }
         };
 
         public async Task<string> Run(string[] arguments) {
