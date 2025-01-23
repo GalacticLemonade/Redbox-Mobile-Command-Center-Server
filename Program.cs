@@ -32,6 +32,13 @@ namespace Redbox_Mobile_Command_Center_Server {
             MoveHelper = new MoveHelper(HardwareService);
             ServiceLocator.Instance.AddService<IControlSystem>((object)new ClientControlSystem(HardwareService));
 
+            if (!ClientHelper.TestCommunication()) {
+                Console.WriteLine("Failed to communicate with HAL.");
+                return;
+            }
+
+
+
             // prevent closing of app
             while (true) { }
         }
