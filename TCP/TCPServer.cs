@@ -46,11 +46,11 @@ public class TCPServer {
                 int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
                 if (bytesRead > 0) {
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    //message = EncryptionHelper.Decrypt(message);
+                    message = EncryptionHelper.Decrypt(message);
                     Console.WriteLine($"Received from client: {message}");
 
                     string response = await Program.OnServerIncomingData(message);
-                    //response = EncryptionHelper.Encrypt(response);
+                    response = EncryptionHelper.Encrypt(response);
                     byte[] responseData = Encoding.UTF8.GetBytes(response);
                     await stream.WriteAsync(responseData, 0, responseData.Length);
                 }
