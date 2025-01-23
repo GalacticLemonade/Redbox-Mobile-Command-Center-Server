@@ -33,8 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Redbox.Core">
+      <HintPath>..\Orange\Redbox.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Redbox.HAL.Client">
       <HintPath>Redbox\Redbox.HAL.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Redbox.HAL.MSHALTester">
+      <HintPath>..\Redbox.HAL.MSHALTester\bin\Release\Redbox.HAL.MSHALTester.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

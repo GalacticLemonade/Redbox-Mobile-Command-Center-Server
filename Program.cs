@@ -1,15 +1,20 @@
-﻿using System;
+﻿using Redbox.HAL.Client;
+using Redbox.HAL.Client.Services;
+using Redbox.HAL.Component.Model;
+using Redbox.IPC.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Redbox_Mobile_Command_Center_Server {
     public class Program {
         static TCPClient client;
+
+        static HardwareService HardwareService;
+        static ClientHelper ClientHelper;
+        static MoveHelper MoveHelper;
 
         public static List<string> SplitByCRLF(string input) {
             // Split the string by \r\n
@@ -21,6 +26,11 @@ namespace Redbox_Mobile_Command_Center_Server {
             server.Start();
 
             SetKioskIP();
+
+            HardwareService = new HardwareService(IPCProtocol.Parse("rcp://127.0.0.1:7001"));
+            ClientHelper = new ClientHelper(HardwareService);
+            MoveHelper = new MoveHelper(HardwareService);
+            ServiceLocator.Instance.AddService<IControlSystem>((object)new ClientControlSystem(HardwareService));
 
             // prevent closing of app
             while (true) { }
