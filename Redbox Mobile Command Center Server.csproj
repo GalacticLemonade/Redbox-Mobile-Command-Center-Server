@@ -39,7 +39,8 @@
     <Reference Include="Redbox.HAL.Client">
       <HintPath>Redbox\Redbox.HAL.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Redbox.HAL.MSHALTester">
+    <Reference Include="Redbox.HAL.MSHALTester, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Redbox.HAL.MSHALTester\bin\Release\Redbox.HAL.MSHALTester.dll</HintPath>
     </Reference>
     <Reference Include="System" />

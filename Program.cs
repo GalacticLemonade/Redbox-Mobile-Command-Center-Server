@@ -12,7 +12,7 @@ namespace Redbox_Mobile_Command_Center_Server {
     public class Program {
         static TCPClient client;
 
-        static HardwareService HardwareService;
+        public static HardwareService HardwareService;
         static ClientHelper ClientHelper;
         static MoveHelper MoveHelper;
 
