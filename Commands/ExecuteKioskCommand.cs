@@ -21,6 +21,20 @@ namespace Redbox_Mobile_Command_Center_Server.Commands {
                         moveToSlotExecutor.Run();
                         return moveToSlotExecutor.Results[0].Message;
                     }
+                case "exit-tester":
+                    Console.WriteLine("Cleanup hardware");
+                    Program.HardwareService.ExecuteServiceCommand("SERVICE diagnostic-mode status: false");
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.AppendLine(" AIRXCHGR FANON");
+                    stringBuilder.AppendLine(" VENDDOOR CLOSE");
+                    stringBuilder.AppendLine(" GRIPPER RENT");
+                    stringBuilder.AppendLine(" GRIPPER RETRACT");
+                    stringBuilder.AppendLine(" SENSOR PICKER-OFF");
+                    stringBuilder.AppendLine(" ROLLER STOP");
+                    stringBuilder.AppendLine(" RINGLIGHT OFF");
+                    stringBuilder.AppendLine(" CLEAR");
+                    Program.HardwareService.ExecuteImmediateProgram(Encoding.ASCII.GetBytes(stringBuilder.ToString()), out HardwareJob _);
+                    break;
                    
             }
 
