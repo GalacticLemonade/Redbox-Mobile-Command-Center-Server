@@ -39,10 +39,6 @@
     <Reference Include="Redbox.HAL.Client">
       <HintPath>Redbox\Redbox.HAL.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Redbox.HAL.MSHALTester, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Redbox.HAL.MSHALTester\bin\Release\Redbox.HAL.MSHALTester.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,6 +53,7 @@
     <Compile Include="Commands\ExecuteKioskCommand.cs" />
     <Compile Include="Commands\PingKioskCommand.cs" />
     <Compile Include="EncryptionHelper.cs" />
+    <Compile Include="Redbox.HAL.MSHALTester\TesterMoveToSlotExecutor.cs" />
     <Compile Include="TCP\HALConnection.cs" />
     <Compile Include="Cmd\ICommand.cs" />
     <Compile Include="Program.cs" />
