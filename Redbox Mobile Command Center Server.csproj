@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cmd\CommandRegistry.cs" />
+    <Compile Include="Commands\ExecuteKioskCommand.cs" />
     <Compile Include="Commands\PingKioskCommand.cs" />
     <Compile Include="EncryptionHelper.cs" />
     <Compile Include="TCP\HALConnection.cs" />
