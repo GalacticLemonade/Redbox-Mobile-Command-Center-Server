@@ -49,6 +49,7 @@
     <Compile Include="CommandRegistry.cs" />
     <Compile Include="Commands\PingKioskCommand.cs" />
     <Compile Include="EncryptionHelper.cs" />
+    <Compile Include="HALConnection.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
