@@ -46,15 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandRegistry.cs" />
+    <Compile Include="Cmd\CommandRegistry.cs" />
     <Compile Include="Commands\PingKioskCommand.cs" />
     <Compile Include="EncryptionHelper.cs" />
-    <Compile Include="HALConnection.cs" />
-    <Compile Include="ICommand.cs" />
+    <Compile Include="TCP\HALConnection.cs" />
+    <Compile Include="Cmd\ICommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TCPClient.cs" />
-    <Compile Include="TCPServer.cs" />
+    <Compile Include="TCP\TCPClient.cs" />
+    <Compile Include="TCP\TCPServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
